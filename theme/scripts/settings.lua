@@ -3,6 +3,7 @@ dofile("scripts/topbarcmd.lua")
 dofile("scripts/menuSystem.lua")
 dofile("scripts/controllersSettings.lua")
 dofile("scripts/powerSettings.lua")
+dofile("scripts/npcSettings.lua")
 dofile("scripts/loaderSettings.lua")
 dofile("scripts/systemStatus.lua")
 
@@ -15,6 +16,7 @@ function drawAbout(onFocus)
     menuSystem.printLine(string.format("RVLoader v%.1f", Sys.getVersion()))
     menuSystem.printLine("Developed by Aurelio")
     menuSystem.printLine("Powered by LUA")
+    menuSystem.printLine("Hacked by Nold")
 
     Gfx.drawImage(luaLogo_Img, leftMargin, (menuSystem.lineI - 1) * menuSystem.lineHeight)
 end
@@ -42,6 +44,13 @@ function init()
         table.insert(settingMenus.initFunctions, initPower)
         table.insert(settingMenus.drawFunctions, drawPower)
         table.insert(settingMenus.handleFunctions, handlePower)
+    end
+
+    if NPC.isConnected() then
+        table.insert(settingMenus.names, "NPC")
+        table.insert(settingMenus.initFunctions, initNPC)
+        table.insert(settingMenus.drawFunctions, drawNPC)
+        table.insert(settingMenus.handleFunctions, handleNPC)
     end
 
     table.insert(settingMenus.names, "About")

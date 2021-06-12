@@ -29,6 +29,7 @@ void luaRegisterCustomLibs(lua_State* L) {
     luaRegisterAnimLib(L);
     luaRegisterGcpLib(L);
     luaRegisterPMS2Lib(L);
+    luaRegisterNPCLib(L);
     luaRegisterUAMPLib(L);
     luaRegisterThemeLib(L);
 }

@@ -14,6 +14,9 @@ function drawSystemStatus(onFocus)
     if Time.available() then
         menuSystem.printLine("MX-Chip detected")
     end
+    if NPC.isConnected() then
+        menuSystem.printLine("NPC detected")
+    end
 
     if PMS2.isConnected() then
         local chargeStatus = PMS2.getChargeStatus()

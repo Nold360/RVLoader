@@ -19,4 +19,5 @@ void luaRegisterSysLib(lua_State* L);
 void luaRegisterAnimLib(lua_State* L);
 void luaRegisterGcpLib(lua_State* L);
 void luaRegisterPMS2Lib(lua_State* L);
+void luaRegisterNPCLib(lua_State* L);
 void luaRegisterUAMPLib(lua_State* L);
