@@ -12,9 +12,8 @@ ARG LIBS="gamecube|wii|ppc"
 
 # Environment Variables for DevkitPro
 ENV DEVKITPRO=/opt/devkitpro
-ENV DEVKITARM=/opt/devkitpro/devkitARM
 ENV DEVKITPPC=/opt/devkitpro/devkitPPC
-ENV PATH=${DEVKITPRO}/tools/bin:$PATH
+ENV PATH=${DEVKITPRO}/tools/bin:${DEVKITPPC}/bin:$PATH
 
 RUN apt-get update && \
                 apt-get -y --no-install-recommends install wget ca-certificates cmake bzip2 xz-utils make \

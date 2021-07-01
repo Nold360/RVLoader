@@ -4,12 +4,15 @@ function initNPC()
     npcLedCount = NPC.getLedCount()
     npcLedMode  = NPC.getLedMode()
 
-    menu = {"ledCount", "ledMode", "ledColor"}
+    menu = {"ledCount", "ledMode", "saveConfig"}
     npcLedColor = {}
-    for i=4, (npcLedCount*3)+3 do
-        npcLedColor[i] = 128
-        rowName = string.format("ledColor_%u", i-3)
-        menu[i] = rowName
+    num = 0
+    for i=1, npcLedCount do
+      for c=0, 2 do
+        npcLedColor[i+num+c] = 128
+        table.insert(menu, string.format("npcLedColor_%u", i+num+c))
+      end
+      num = num + 2
     end
     npcSelectedEnum = enum(menu)
     npcSelected = npcSelectedEnum[1]
@@ -32,16 +35,16 @@ function drawNPC(onFocus)
         menuSystem.printLineValue("Static", 1)
     end
 
-    ledNum = 1
-    for i=1, (npcLedCount*3)+1, 3 do
+    ledNum = 0
+    for i=1, npcLedCount do
         menuSystem.printLine(string.format("Color LED %u:", ledNum), npcSelected.id)
         menuSystem.printLine("Red:", npcSelected.id)
-        menuSystem.printLineValue(ledColor[i])
+        menuSystem.printLineValue(npcLedColor[i+ledNum])
         menuSystem.printLine("Green:", npcSelected.id)
-        menuSystem.printLineValue(ledColor[i+1])
+        menuSystem.printLineValue(npcLedColor[i+ledNum+1])
         menuSystem.printLine("Blue:", npcSelected.id)
-        menuSystem.printLineValue(ledColor[i+2])
-        ledNum = ledNum + 1
+        menuSystem.printLineValue(npcLedColor[i+ledNum+2])
+        ledNum = ledNum + 2
     end
 
     menuSystem.printLine("Save config", npcSelected.id)
@@ -73,7 +76,7 @@ function handleNPC(onFocus)
             ledCount = ledCount + 1
         end
     elseif npcSelected == npcSelectedEnum.ledMode then
-        if down.BUTTON_LEFT or down.BUTTON_RIGHT then                                                                                                                                                                                                                           
+        if down.BUTTON_LEFT or down.BUTTON_RIGHT then
             npcLedMode = 1 - npcLedMode
         end
     end

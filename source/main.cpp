@@ -270,7 +270,11 @@ int main(int argc, char **argv) {
     if (PMS2::isConnected()) {
         volatile u16 dummyPMS2 = PMS2::getBatDesignCapacity();
     }
-
+  
+    if(NPC::isConnected()) {
+        volatile u16 dummyNPC = NPC::getVersion();
+    }
+ 
     //Reset GC+2.0 mapping
     if (GCPlus::isV2()) {
         GCPlus::unlock();
