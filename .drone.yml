@@ -1,0 +1,57 @@
+---
+kind: pipeline
+name: build-rvloader
+type: kubernetes
+
+steps:
+- name: build
+  image: lib42/devkitpro:rvloader
+  commands:
+    - make
+    - mkdir -p /release/apps/rvloader /release/channels /release/games /release/rvloader/themes /release/vc /release/wbfs
+    - cp boot.dol /release/apps/rvloader/
+    - cp -r theme /release/rvloader/themes/main
+    - |
+      cat > /release/apps/rvloader/meta.xml << EOF
+      <app version="1">
+        <name>RVLoader</name>
+        <coder>Aurelio</coder>
+        <version>${DRONE_TAG}</version>
+        <release_date>$(date --iso-8601)</release_date>
+        <short_description>Games loader for Wii portables</short_description>
+        <long_description/>
+        <no_ios_reload/>
+        <ahb_access/>
+      </app>
+      EOF
+  volumes:
+  - name: cache
+    path: /release
+
+- name: package
+  image: lib42/devkitpro:rvloader
+  commands:
+    - tar -czf RVLoader_${DRONE_TAG}.tar.gz /release/
+    - mv RVLoader*.tar.gz /release/
+  volumes:
+  - name: cache
+    path: /release
+  when:
+    event: tag
+
+- name: publish
+  image: plugins/github-release
+  settings:
+    api_key:
+      from_secret: github_token
+    files:
+    - /release/RVLoader*.tar.gz
+  volumes:
+  - name: cache
+    path: /release
+  when:
+    event: tag
+
+volumes:
+- name: cache
+  temp: {}
