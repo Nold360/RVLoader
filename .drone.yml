@@ -3,7 +3,26 @@ kind: pipeline
 name: build-rvloader
 type: kubernetes
 
+# Build Container Image using cronjob only
 steps:
+- name: build-container
+  image: plugins/buildah-docker
+  settings:
+    username:
+      from_secret: docker_username
+    password:
+      from_secret: docker_password
+    repo: docker.io/lib42/devkitpro
+    dockerfile: Containerfile
+    tags:
+    - rvloader
+  when:
+    event:
+    - cron
+    cron:
+    - weekly
+
+# Build RVLoader
 - name: build
   image: lib42/devkitpro:rvloader
   commands:
@@ -39,6 +58,7 @@ steps:
   when:
     event: tag
 
+# Public release on 'tag'-Events
 - name: publish
   image: plugins/github-release
   settings:

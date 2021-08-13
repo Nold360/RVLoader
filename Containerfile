@@ -21,6 +21,7 @@ RUN apt-get update && \
     && apt-get clean && \ 
     wget -nv -O devkitpro-pacman.amd64.deb https://github.com/devkitPro/pacman/releases/download/v${VERSION}/devkitpro-pacman.amd64.deb && \
         dpkg -i devkitpro-pacman.amd64.deb ; apt-get -f -y install ; \
+    ln -s /proc/self/mounts /etc/mtab && \
     dkp-pacman -S -y --noconfirm ${PKG} && \
     dkp-pacman -S --needed --noconfirm $(dkp-pacman -Slq dkp-libs | grep -E "^($LIBS)-") && \
     dkp-pacman -Scc --noconfirm
