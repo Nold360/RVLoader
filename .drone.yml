@@ -29,7 +29,8 @@ steps:
     - make
     - mkdir -p /release/apps/rvloader /release/channels /release/games /release/rvloader/themes /release/vc /release/wbfs
     - cp boot.dol /release/apps/rvloader/
-    - cp -r theme /release/rvloader/themes/main
+    - cp -r static/theme /release/rvloader/themes/main
+    - cp -r static/backgrounds /release/rvloader/
     - |
       cat > /release/apps/rvloader/meta.xml << EOF
       <app version="1">
