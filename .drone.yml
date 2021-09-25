@@ -51,13 +51,18 @@ steps:
 - name: package
   image: lib42/devkitpro:rvloader
   commands:
-    - tar -czf RVLoader_${DRONE_TAG}.tar.gz /release/
+    - tar -czf RVLoader_${DRONE_TAG}.tar.gz -C /release/ ./
     - mv RVLoader*.tar.gz /release/
   volumes:
   - name: cache
     path: /release
   when:
-    event: tag
+    event:
+    - tag
+    refs:
+      include:
+      - refs/tags/**
+    
 
 # Public release on 'tag'-Events
 - name: publish
@@ -71,7 +76,34 @@ steps:
   - name: cache
     path: /release
   when:
-    event: tag
+    branch:
+    - master
+    event:
+    - tag
+    refs:
+      exclude:
+      - refs/tags/prerelease
+      include:
+      - refs/tags/v**
+       
+
+# Pre-release on not 'tag'-Events
+- name: prerelease
+  image: plugins/github-release
+  settings:
+    api_key:
+      from_secret: github_token
+    files:
+    - /release/RVLoader*.tar.gz
+    prerelease: true
+  volumes:
+  - name: cache
+    path: /release
+  when:
+    event:
+    - tag
+    refs:
+      - refs/tags/prerelease
 
 volumes:
 - name: cache
